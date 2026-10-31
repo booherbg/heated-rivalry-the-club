@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Join the Club: QR codes</title>
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>
+  :root { --pink: #ff1c8c; --blue: #2440ff; --ink: #f4ecff; --dim: #9c8fb4; --bg: #07040c; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); }
+  body {
+    font-family: "Avenir Next Condensed", "Arial Narrow", "Roboto Condensed", system-ui, sans-serif;
+    min-height: 100dvh; padding: max(24px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+    background:
+      radial-gradient(110% 50% at 0% 0%, rgba(255, 28, 140, .28), transparent 60%),
+      radial-gradient(110% 50% at 100% 100%, rgba(36, 64, 255, .32), transparent 60%),
+      var(--bg);
+  }
+  h1 { margin: 0; text-align: center; text-transform: uppercase; font-weight: 800; line-height: .95; }
+  h1 .a { display: block; font-size: clamp(38px, 11vw, 84px); color: #ffe3f2; text-shadow: 0 0 8px var(--pink), 0 0 26px var(--pink), 0 0 60px var(--pink); }
+  h1 .b { display: block; margin-top: 8px; font-size: clamp(20px, 5.5vw, 40px); letter-spacing: .3em; padding-left: .3em; color: #e2e8ff; text-shadow: 0 0 8px var(--blue), 0 0 26px var(--blue); }
+  .lede { text-align: center; color: var(--dim); font-size: 18px; margin: 14px 0 22px; }
+  .cards { display: flex; flex-wrap: wrap; gap: 22px; justify-content: center; }
+  .card {
+    width: min(360px, 100%); background: #fff; color: #120a1c; border-radius: 22px; padding: 18px 18px 14px; text-align: center;
+    box-shadow: 0 0 0 4px var(--pink), 0 0 0 8px var(--blue), 0 0 50px rgba(255, 28, 140, .45);
+    text-decoration: none; display: block;
+  }
+  .card .num { font-size: 15px; letter-spacing: .24em; text-transform: uppercase; color: #6a5a80; }
+  .card h2 { margin: 2px 0 2px; font-size: 30px; text-transform: uppercase; letter-spacing: .05em; }
+  .card .what { font-size: 16px; color: #5a4a70; margin-bottom: 10px; }
+  .card .code svg { width: 100%; height: auto; display: block; }
+  .card .url { margin-top: 8px; font-size: 13px; color: #5a4a70; word-break: break-all; }
+  .foot { margin: 26px auto 0; max-width: 560px; text-align: center; color: var(--dim); font-size: 15px; line-height: 1.5; }
+  .foot a { color: var(--ink); }
+  /* poster: one channel, as big as the screen allows (for a TV or a laptop by the door) */
+  body.poster { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  body.poster .card { width: min(70vh, 92vw); }
+  body.poster .foot, body.poster .lede { display: none; }
+  @media print {
+    html, body { background: #fff !important; color: #000; }
+    h1 .a, h1 .b { color: #000; text-shadow: none; }
+    .card { box-shadow: 0 0 0 3px #000; break-inside: avoid; }
+    .foot, .lede { display: none; }
+  }
+</style>
+</head>
+<body>
+  <h1><span class="a">Join the club</span><span class="b">Scan, pick, light up</span></h1>
+  <p class="lede">Point your camera at a code. Same channel, same flash.</p>
+  <div class="cards" id="cards"></div>
+  <p class="foot">
+    Show one channel big, for a TV or a laptop by the door:
+    <a href="?ch=1">1</a> · <a href="?ch=2">2</a> · <a href="?ch=3">3</a>.
+    Or print this page. <a href="./">Back to the lights</a>
+  </p>
+<script src="vendor/qrcode.js"></script>
+<script>
+  // The channels, as the light page names them (app.js CHANNELS).
+  const CH = [
+    ['The Club', 'Fast pink and blue flicker'],
+    ['Slow Burn', 'Green, then blue: holds, then a quick blend'],
+    ['Rivals', 'Pink and blue, slow, melting together'],
+  ];
+  const base = new URL('./', location.href).href;  // the light page, wherever this page is served
+  const only = parseInt(new URLSearchParams(location.search).get('ch'), 10);
+  const holder = document.getElementById('cards');
+  CH.forEach(([name, what], i) => {
+    if (only && only !== i + 1) return;
+    const url = `${base}?ch=${i + 1}`;
+    const qr = qrcode(0, 'M');
+    qr.addData(url);
+    qr.make();
+    const a = document.createElement('a');
+    a.className = 'card';
+    a.href = url;
+    a.innerHTML = `<div class="num">Channel ${i + 1}</div><h2></h2><div class="what"></div><div class="code">${qr.createSvgTag({ cellSize: 8, margin: 2, scalable: true })}</div><div class="url"></div>`;
+    a.querySelector('h2').textContent = name;
+    a.querySelector('.what').textContent = what;
+    a.querySelector('.url').textContent = url.replace(/^https?:\/\//, '');
+    holder.appendChild(a);
+  });
+  if (only) document.body.classList.add('poster');
+</script>
+</body>
+</html>

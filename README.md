@@ -4,13 +4,16 @@ A fan-made party light. Open it on your phone, pick a channel, tap **Light it up
 Every phone on the same channel flashes in sync.
 
 - **Channel 1, The Club:** a fast pink and blue flicker, on sixteenth notes.
-- **Channel 2, Slow Burn:** green and blue, sliding back and forth.
+- **Channel 2, Slow Burn:** green, then blue: each holds about five seconds, then a quick blend.
 - **Channel 3, Rivals:** pink and blue, slow, melting together.
 
-The pink and blue are sampled from the club scene itself. Everything locks to a 126 BPM grid (the Harrison remix's tempo, by one catalog; unconfirmed); a link can set its own
+The pink and blue started as samples from the club scene, then were tuned by eye (hot pink, a deep blue). Everything locks to a 126 BPM grid (the Harrison remix's tempo, by one catalog; unconfirmed); a link can set its own
 (`?ch=1&bpm=128`), and the QR code carries it along. The DJ booth plays the song from the scene, Harrison's 2022 remix of t.A.T.u.'s "All the Things She Said": open it in Spotify or Apple Music, play it in a Spotify embed, or play Crave's clip of the scene from 1:55 (one phone, on a speaker).
 
 **Live:** https://blainebooher.com/heated-rivalry-the-club/ (a channel link: `?ch=2`)
+
+**QR codes:** https://blainebooher.com/heated-rivalry-the-club/qr, all three channels, printable. `qr?ch=1` shows one
+channel as big as the screen allows, for a TV or a laptop by the door.
 
 ## How the sync works
 

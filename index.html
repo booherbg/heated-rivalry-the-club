@@ -17,8 +17,8 @@
 <meta property="og:description" content="Your phone is a club light. Same channel, same flash.">
 <style>
   :root {
-    --pink: #ff2047;
-    --blue: #3c67ff;
+    --pink: #ff1c8c;
+    --blue: #2440ff;
     --ink: #f4ecff;
     --dim: #9c8fb4;
     --bg: #07040c;
@@ -39,8 +39,8 @@
     padding: max(28px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
     display: flex; flex-direction: column; align-items: center; gap: 18px;
     background:
-      radial-gradient(120% 60% at 0% 0%, rgba(255, 32, 71, .28), transparent 60%),
-      radial-gradient(120% 60% at 100% 100%, rgba(60, 103, 255, .32), transparent 60%),
+      radial-gradient(120% 60% at 0% 0%, rgba(255, 28, 140, .28), transparent 60%),
+      radial-gradient(120% 60% at 100% 100%, rgba(36, 64, 255, .32), transparent 60%),
       var(--bg);
     overflow: hidden;
   }
@@ -59,13 +59,13 @@
   h1 { margin: 0; line-height: .9; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
   h1 .heated {
     display: block; font-size: clamp(44px, 15vw, 96px); color: #ffe3f2;
-    text-shadow: 0 0 6px var(--pink), 0 0 18px var(--pink), 0 0 42px var(--pink), 0 0 80px rgba(255, 32, 71, .6);
+    text-shadow: 0 0 6px var(--pink), 0 0 18px var(--pink), 0 0 42px var(--pink), 0 0 80px rgba(255, 28, 140, .6);
     animation: buzz 6s infinite;
   }
   h1 .club {
     display: block; margin-top: 10px; font-size: clamp(26px, 8.5vw, 56px); letter-spacing: .32em; padding-left: .32em;
     color: #e2e8ff;
-    text-shadow: 0 0 6px var(--blue), 0 0 18px var(--blue), 0 0 42px var(--blue), 0 0 80px rgba(60, 103, 255, .7);
+    text-shadow: 0 0 6px var(--blue), 0 0 18px var(--blue), 0 0 42px var(--blue), 0 0 80px rgba(36, 64, 255, .7);
   }
   @keyframes buzz { 0%, 91%, 93%, 96%, 100% { opacity: 1; } 92%, 95% { opacity: .55; } }
   .tag { margin: 14px 0 0; color: var(--dim); font-size: 17px; letter-spacing: .06em; }
@@ -82,14 +82,14 @@
   .chan .name { font-size: 22px; font-weight: 700; letter-spacing: .03em; }
   .chan .blurb { font-size: 15px; color: var(--dim); }
   .chan .sw { width: 38px; height: 38px; border-radius: 50%; flex: none; box-shadow: 0 0 14px rgba(255, 255, 255, .15); }
-  .chan.on { border-color: #fff; background: rgba(255, 255, 255, .10); box-shadow: 0 0 0 1px #fff, 0 0 24px rgba(255, 32, 71, .35), 0 0 36px rgba(60, 103, 255, .3); }
+  .chan.on { border-color: #fff; background: rgba(255, 255, 255, .10); box-shadow: 0 0 0 1px #fff, 0 0 24px rgba(255, 28, 140, .35), 0 0 36px rgba(36, 64, 255, .3); }
   .chan.on .num { color: #fff; }
 
   #go {
     margin-top: 8px; width: 100%; padding: 18px; border: 0; border-radius: 16px;
     font-size: 26px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: #fff;
     background: linear-gradient(90deg, var(--pink), var(--blue));
-    box-shadow: 0 0 24px rgba(255, 32, 71, .55), 0 0 40px rgba(60, 103, 255, .45);
+    box-shadow: 0 0 24px rgba(255, 28, 140, .55), 0 0 40px rgba(36, 64, 255, .45);
   }
   #go:active { transform: scale(.98); }
   .row { display: flex; gap: 10px; }
@@ -97,6 +97,7 @@
     flex: 1; padding: 13px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, .22);
     background: transparent; font-size: 18px; font-weight: 700; letter-spacing: .08em;
   }
+  a.ghost { color: inherit; text-decoration: none; text-align: center; }
   .dj {
     display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 14px; text-decoration: none; color: var(--ink);
     border: 1px dashed rgba(255, 255, 255, .28); background: rgba(255, 255, 255, .03);
@@ -104,7 +105,7 @@
   .djtag {
     flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
     font-weight: 800; letter-spacing: .06em; color: #fff; background: #111; border: 2px solid var(--pink);
-    box-shadow: 0 0 12px rgba(255, 32, 71, .6), inset 0 0 10px rgba(60, 103, 255, .5);
+    box-shadow: 0 0 12px rgba(255, 28, 140, .6), inset 0 0 10px rgba(36, 64, 255, .5);
   }
   button.dj { width: 100%; text-align: left; }
   #booth {
@@ -142,7 +143,7 @@
   /* ---- the secret: a tiny puck in the footer ---- */
   .puck {
     display: inline-block; vertical-align: middle; margin-left: 6px; width: 16px; height: 9px; padding: 0; border: 0; border-radius: 50%;
-    background: #111; box-shadow: 0 2px 0 #000, 0 0 6px rgba(255, 32, 71, .55), 0 0 10px rgba(60, 103, 255, .45);
+    background: #111; box-shadow: 0 2px 0 #000, 0 0 6px rgba(255, 28, 140, .55), 0 0 10px rgba(36, 64, 255, .45);
   }
   #secret {
     position: fixed; inset: 0; z-index: 6; background: #000; display: flex; align-items: center; justify-content: center;
@@ -150,10 +151,10 @@
   }
   #secret::after {
     content: ""; position: absolute; inset: 0; pointer-events: none;
-    background: radial-gradient(70% 55% at 0% 0%, rgba(255, 32, 71, .35), transparent 70%), radial-gradient(70% 55% at 100% 100%, rgba(60, 103, 255, .4), transparent 70%);
+    background: radial-gradient(70% 55% at 0% 0%, rgba(255, 28, 140, .35), transparent 70%), radial-gradient(70% 55% at 100% 100%, rgba(36, 64, 255, .4), transparent 70%);
     mix-blend-mode: screen;
   }
-  #secretImg { max-width: 100%; max-height: calc(100dvh - 110px); border-radius: 14px; box-shadow: 0 0 0 3px var(--pink), 0 0 0 6px var(--blue), 0 0 40px rgba(255, 32, 71, .45); }
+  #secretImg { max-width: 100%; max-height: calc(100dvh - 110px); border-radius: 14px; box-shadow: 0 0 0 3px var(--pink), 0 0 0 6px var(--blue), 0 0 40px rgba(255, 28, 140, .45); }
   .secretBar { position: absolute; left: 16px; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); display: flex; gap: 10px; z-index: 1; }
   .secretBar .ghost { background: rgba(0, 0, 0, .55); }
 
@@ -176,7 +177,7 @@
   }
   .card {
     width: min(400px, 100%); text-align: center; color: #120a1c; background: #fff; border-radius: 22px; padding: 20px 20px 16px;
-    box-shadow: 0 0 0 4px var(--pink), 0 0 0 8px var(--blue), 0 0 50px rgba(255, 32, 71, .5);
+    box-shadow: 0 0 0 4px var(--pink), 0 0 0 8px var(--blue), 0 0 50px rgba(255, 28, 140, .5);
   }
   .card h2 { margin: 0; font-size: 26px; letter-spacing: .06em; text-transform: uppercase; }
   .card .ch { margin: 4px 0 10px; font-size: 18px; font-weight: 700; color: #5a4a70; }
@@ -198,7 +199,8 @@
     <div id="chans" class="panel"></div>
     <button id="go">Light it up</button>
     <div class="row">
-      <button id="share" class="ghost">Share this channel (QR)</button>
+      <button id="share" class="ghost">Share this channel</button>
+      <a href="qr.html" class="ghost">All QR codes</a>
     </div>
     <button id="djOpen" class="dj">
       <span class="djtag">DJ</span>

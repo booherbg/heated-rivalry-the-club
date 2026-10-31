@@ -1,11 +1,11 @@
 // Heated Rivalry: The Club. Every phone is a light, and every phone on the same channel shows the same color at
 // the same moment: the color is a pure function of (channel, world time), so no server is needed, only a shared clock.
 
-// ---- the colors: sampled from the club scene itself (its brightest lit pixels, pushed to full brightness) ----
-const PINK = [255, 32, 71];   // the crimson pink of the light panels and faces
-const BLUE = [60, 103, 255];  // the cold blue on the shirts and the crowd
+// ---- the colors: first sampled from the club scene, then tuned by eye on a phone ----
+const PINK = [255, 28, 140];  // hot pink (Blaine, 2026-10-31: the scene's crimson read too red; "it's pink")
+const BLUE = [36, 64, 255];   // the scene's cold blue, a touch deeper
 const GREEN = [0, 255, 120];
-const TEAL_BLUE = [0, 110, 255];
+const TEAL_BLUE = [0, 84, 255];
 
 const mix = (a, b, k) => a.map((v, i) => v + (b[i] - v) * k);
 const dim = (c, k) => c.map(v => v * k);
@@ -37,15 +37,15 @@ const CHANNELS = [
   },
   {
     name: 'Slow Burn',
-    blurb: 'Green and blue, sliding back and forth',
+    blurb: 'Green, then blue: holds, then a quick blend',
     swatch: [GREEN, TEAL_BLUE],
     color(t) {
-      // Over to blue across two bars, back to green across two more; it rests a moment on each color, and dips a
-      // little in the middle of each crossing so it reads as a pulse.
-      const span = BEAT * 8, n = Math.floor(t / span), p = (t - n * span) / span;
-      const s = p * p * (3 - 2 * p);  // smoothstep: lingers at the ends
-      const k = n % 2 === 0 ? s : 1 - s;
-      return dim(mix(GREEN, TEAL_BLUE, k), 0.72 + 0.28 * Math.abs(1 - 2 * s));
+      // Each color holds for about five seconds, then blends over quickly into the other.
+      const span = 5000, blend = 800, n = Math.floor(t / span), p = t - n * span;
+      const [from, to] = n % 2 === 0 ? [GREEN, TEAL_BLUE] : [TEAL_BLUE, GREEN];
+      if (p < span - blend) return from;
+      const q = (p - (span - blend)) / blend;
+      return mix(from, to, q * q * (3 - 2 * q));
     },
   },
   {
