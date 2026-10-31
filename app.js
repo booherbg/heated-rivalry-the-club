@@ -245,6 +245,38 @@ $('djOpen').addEventListener('click', () => {
   $('booth').hidden = false;
 });
 $('djClose').addEventListener('click', () => { $('booth').hidden = true; });
+
+// The secret: a tiny puck in the footer shows a photo picked from this phone. The photo stays on the phone (kept in
+// this browser's own storage so it's there all night), and never goes anywhere near the site.
+const Secret = (() => {
+  const DB = 'the-club', STORE = 'secret';
+  const open = () => new Promise((res, rej) => {
+    const r = indexedDB.open(DB, 1);
+    r.onupgradeneeded = () => r.result.createObjectStore(STORE);
+    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+  });
+  const run = (mode, fn) => open().then(db => new Promise((res, rej) => {
+    const tx = db.transaction(STORE, mode), req = fn(tx.objectStore(STORE));
+    req.onsuccess = () => res(req.result); req.onerror = () => rej(req.error);
+  }));
+  let url = null;
+  async function load() { try { return await run('readonly', s => s.get('photo')); } catch (e) { return null; } }
+  async function save(blob) { try { await run('readwrite', s => s.put(blob, 'photo')); } catch (e) { /* shown for now, just not kept */ } }
+  function show(blob) {
+    if (url) URL.revokeObjectURL(url);
+    url = URL.createObjectURL(blob);
+    $('secretImg').src = url;
+    $('secret').hidden = false;
+  }
+  $('puck').addEventListener('click', async () => { const b = await load(); if (b) show(b); else $('puckFile').click(); });
+  $('puckFile').addEventListener('change', e => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    save(f); show(f); e.target.value = '';
+  });
+  $('secretSwap').addEventListener('click', () => $('puckFile').click());
+  $('secretClose').addEventListener('click', () => { $('secret').hidden = true; });
+})();
 $('share').addEventListener('click', showQr);
 $('share2').addEventListener('click', e => { e.stopPropagation(); showQr(); });
 $('exit').addEventListener('click', e => { e.stopPropagation(); stop(); });
