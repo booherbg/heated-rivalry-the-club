@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Heated Rivalry: The Club</title>
+<meta name="description" content="Turn your phone into a club light. Every phone on the same channel flashes in sync.">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="The Club">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta property="og:title" content="Heated Rivalry: The Club">
+<meta property="og:description" content="Your phone is a club light. Same channel, same flash.">
+<style>
+  :root {
+    --pink: #ff2047;
+    --blue: #3c67ff;
+    --ink: #f4ecff;
+    --dim: #9c8fb4;
+    --bg: #07040c;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); }
+  body {
+    font-family: "Avenir Next Condensed", "Arial Narrow", "Roboto Condensed", system-ui, sans-serif;
+    overscroll-behavior: none;
+    -webkit-user-select: none; user-select: none;
+  }
+  [hidden] { display: none !important; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+
+  /* ---- the start screen ---- */
+  #start {
+    min-height: 100dvh;
+    padding: max(28px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+    display: flex; flex-direction: column; align-items: center; gap: 18px;
+    background:
+      radial-gradient(120% 60% at 0% 0%, rgba(255, 32, 71, .28), transparent 60%),
+      radial-gradient(120% 60% at 100% 100%, rgba(60, 103, 255, .32), transparent 60%),
+      var(--bg);
+    overflow: hidden;
+  }
+  .beams { position: fixed; inset: 0; pointer-events: none; overflow: hidden; opacity: .55; }
+  .beams i {
+    position: absolute; top: -20%; width: 18vw; height: 140%;
+    filter: blur(18px); mix-blend-mode: screen; transform-origin: 50% 0;
+    animation: sweep 7s ease-in-out infinite alternate;
+  }
+  .beams i:nth-child(1) { left: 8%; background: linear-gradient(var(--pink), transparent 80%); }
+  .beams i:nth-child(2) { left: 70%; background: linear-gradient(var(--blue), transparent 80%); animation-delay: -3.5s; }
+  @keyframes sweep { from { transform: rotate(-22deg); } to { transform: rotate(22deg); } }
+  @media (prefers-reduced-motion: reduce) { .beams i { animation: none; } }
+
+  header { position: relative; text-align: center; margin-top: 4vh; }
+  h1 { margin: 0; line-height: .9; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+  h1 .heated {
+    display: block; font-size: clamp(44px, 15vw, 96px); color: #ffe3f2;
+    text-shadow: 0 0 6px var(--pink), 0 0 18px var(--pink), 0 0 42px var(--pink), 0 0 80px rgba(255, 32, 71, .6);
+    animation: buzz 6s infinite;
+  }
+  h1 .club {
+    display: block; margin-top: 10px; font-size: clamp(26px, 8.5vw, 56px); letter-spacing: .32em; padding-left: .32em;
+    color: #e2e8ff;
+    text-shadow: 0 0 6px var(--blue), 0 0 18px var(--blue), 0 0 42px var(--blue), 0 0 80px rgba(60, 103, 255, .7);
+  }
+  @keyframes buzz { 0%, 91%, 93%, 96%, 100% { opacity: 1; } 92%, 95% { opacity: .55; } }
+  .tag { margin: 14px 0 0; color: var(--dim); font-size: 17px; letter-spacing: .06em; }
+
+  .panel { position: relative; width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 10px; }
+  .label { font-size: 13px; letter-spacing: .24em; text-transform: uppercase; color: var(--dim); margin: 6px 4px 0; }
+  .chan {
+    display: flex; align-items: center; gap: 14px; width: 100%; text-align: left;
+    padding: 12px 14px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, .12);
+    background: rgba(255, 255, 255, .04);
+  }
+  .chan .num { font-size: 30px; font-weight: 800; width: 26px; text-align: center; color: var(--dim); }
+  .chan .words { flex: 1; display: flex; flex-direction: column; }
+  .chan .name { font-size: 22px; font-weight: 700; letter-spacing: .03em; }
+  .chan .blurb { font-size: 15px; color: var(--dim); }
+  .chan .sw { width: 38px; height: 38px; border-radius: 50%; flex: none; box-shadow: 0 0 14px rgba(255, 255, 255, .15); }
+  .chan.on { border-color: #fff; background: rgba(255, 255, 255, .10); box-shadow: 0 0 0 1px #fff, 0 0 24px rgba(255, 32, 71, .35), 0 0 36px rgba(60, 103, 255, .3); }
+  .chan.on .num { color: #fff; }
+
+  #go {
+    margin-top: 8px; width: 100%; padding: 18px; border: 0; border-radius: 16px;
+    font-size: 26px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: #fff;
+    background: linear-gradient(90deg, var(--pink), var(--blue));
+    box-shadow: 0 0 24px rgba(255, 32, 71, .55), 0 0 40px rgba(60, 103, 255, .45);
+  }
+  #go:active { transform: scale(.98); }
+  .row { display: flex; gap: 10px; }
+  .ghost {
+    flex: 1; padding: 13px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, .22);
+    background: transparent; font-size: 18px; font-weight: 700; letter-spacing: .08em;
+  }
+  .dj {
+    display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 14px; text-decoration: none; color: var(--ink);
+    border: 1px dashed rgba(255, 255, 255, .28); background: rgba(255, 255, 255, .03);
+  }
+  .djtag {
+    flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
+    font-weight: 800; letter-spacing: .06em; color: #fff; background: #111; border: 2px solid var(--pink);
+    box-shadow: 0 0 12px rgba(255, 32, 71, .6), inset 0 0 10px rgba(60, 103, 255, .5);
+  }
+  .djwords { display: flex; flex-direction: column; }
+  .djwords b { font-size: 19px; }
+  .djwords span { font-size: 14px; color: var(--dim); }
+  .tips { color: var(--dim); font-size: 15px; line-height: 1.45; margin: 4px 4px 0; }
+  .tips b { color: var(--ink); font-weight: 700; }
+  .tips p { margin: 0 0 6px; }
+  #sync { font-size: 13px; letter-spacing: .08em; color: var(--dim); text-align: center; }
+  .warn { font-size: 13px; color: var(--dim); text-align: center; opacity: .8; }
+  footer { position: relative; margin-top: auto; font-size: 12px; color: var(--dim); opacity: .7; text-align: center; }
+
+  /* ---- the light ---- */
+  #light { position: fixed; inset: 0; background: #000; cursor: none; touch-action: manipulation; }
+  #controls {
+    position: fixed; left: 50%; bottom: max(16px, env(safe-area-inset-bottom)); transform: translateX(-50%);
+    width: min(440px, calc(100% - 32px)); padding: 12px; border-radius: 18px;
+    background: rgba(0, 0, 0, .72); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    display: flex; flex-direction: column; gap: 8px; cursor: default;
+  }
+  #controls .chan { padding: 8px 12px; }
+  #controls .chan .name { font-size: 19px; }
+  #controls .chan .blurb { display: none; }
+
+  /* ---- the QR card ---- */
+  #qr {
+    position: fixed; inset: 0; z-index: 5; display: flex; align-items: center; justify-content: center;
+    padding: 16px; background: rgba(4, 2, 8, .92); cursor: default;
+  }
+  .card {
+    width: min(400px, 100%); text-align: center; color: #120a1c; background: #fff; border-radius: 22px; padding: 20px 20px 16px;
+    box-shadow: 0 0 0 4px var(--pink), 0 0 0 8px var(--blue), 0 0 50px rgba(255, 32, 71, .5);
+  }
+  .card h2 { margin: 0; font-size: 26px; letter-spacing: .06em; text-transform: uppercase; }
+  .card .ch { margin: 4px 0 10px; font-size: 18px; font-weight: 700; color: #5a4a70; }
+  #qrCode svg { width: 100%; height: auto; display: block; }
+  #qrUrl { margin: 8px 0 12px; font-size: 14px; color: #5a4a70; word-break: break-all; }
+  #qrClose { width: 100%; padding: 12px; border: 0; border-radius: 12px; background: #120a1c; color: #fff; font-size: 18px; font-weight: 700; letter-spacing: .1em; }
+</style>
+</head>
+<body>
+<section id="start">
+  <div class="beams"><i></i><i></i></div>
+  <header>
+    <h1><span class="heated">Heated Rivalry</span><span class="club">The Club</span></h1>
+    <p class="tag">Your phone is the light. Same channel, same flash.</p>
+  </header>
+
+  <div class="panel">
+    <div class="label">Pick a channel</div>
+    <div id="chans" class="panel"></div>
+    <button id="go">Light it up</button>
+    <div class="row">
+      <button id="share" class="ghost">Share this channel (QR)</button>
+    </div>
+    <a class="dj" href="https://youtu.be/4ctZ01yg0tc?t=115" target="_blank" rel="noopener">
+      <span class="djtag">DJ</span>
+      <span class="djwords"><b>Play the song from the scene</b><span>One phone only, on the speaker. Opens the clip at 1:55.</span></span>
+    </a>
+    <div id="sync"></div>
+    <div class="tips">
+      <p><b>Brightness all the way up.</b> A web page can't turn it up for you.</p>
+      <p><b>Same channel = same flash.</b> Everyone on channel 1 flashes together, even if they joined at different times.</p>
+      <p id="iosTip" hidden><b>iPhone:</b> for true full screen, tap Share, then <b>Add to Home Screen</b>, and open it from there.</p>
+      <p>Tap the light any time to switch channels or share.</p>
+    </div>
+    <div class="warn">Heads up: flashing lights.</div>
+  </div>
+  <footer>A fan-made party light. Not affiliated with the show.</footer>
+</section>
+
+<div id="light" hidden>
+  <div id="controls" hidden>
+    <div id="chans2"></div>
+    <div class="row">
+      <button id="share2" class="ghost">Share (QR)</button>
+      <button id="exit" class="ghost">Exit</button>
+    </div>
+  </div>
+</div>
+
+<div id="qr" hidden>
+  <div class="card">
+    <h2>Join the club</h2>
+    <div class="ch" id="qrChan"></div>
+    <div id="qrCode"></div>
+    <div id="qrUrl"></div>
+    <button id="qrClose">Back</button>
+  </div>
+</div>
+
+<script src="vendor/qrcode.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
