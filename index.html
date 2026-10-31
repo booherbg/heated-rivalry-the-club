@@ -125,9 +125,7 @@
     box-shadow: 0 -6px 24px rgba(255, 28, 140, .25), 0 -2px 30px rgba(36, 64, 255, .2);
     font-size: 16px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
   }
-  .trayHandle::before { content: ""; width: 34px; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, .35); }
-  #tray.open .trayHandle::before { transform: rotate(180deg); }
-  .trayBody {
+    .trayBody {
     overflow-y: auto; -webkit-overflow-scrolling: touch; background: #050208;
     padding: 6px 16px calc(20px + env(safe-area-inset-bottom));
   }
@@ -158,6 +156,14 @@
   .tips b { color: var(--ink); font-weight: 700; }
   .tips p { margin: 0 0 6px; }
   #sync { font-size: 13px; letter-spacing: .08em; color: var(--dim); text-align: center; }
+  .iphone {
+    margin-top: 10px; padding: 14px 14px 6px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, .14);
+    background: rgba(255, 255, 255, .035); color: var(--dim); font-size: 15px; line-height: 1.45;
+  }
+  .iphone h3 { margin: 0 0 8px; font-size: 14px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink); }
+  .iphone ol { margin: 0; padding-left: 20px; }
+  .iphone li { margin-bottom: 9px; }
+  .iphone b { color: var(--ink); }
   .warn { font-size: 13px; color: var(--dim); text-align: center; opacity: .8; }
   footer { position: relative; margin-top: auto; font-size: 12px; color: var(--dim); opacity: .7; text-align: center; }
 
@@ -204,6 +210,13 @@
   .card .ch { margin: 4px 0 10px; font-size: 18px; font-weight: 700; color: #5a4a70; }
   #qrCode svg { width: 100%; height: auto; display: block; }
   #qrUrl { margin: 8px 0 12px; font-size: 14px; color: #5a4a70; word-break: break-all; }
+  #fsHelp { position: fixed; inset: 0; z-index: 5; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(4, 2, 8, .88); }
+  .card.fs { text-align: left; }
+  .card.fs h2 { text-align: center; margin-bottom: 8px; }
+  .card.fs p, .card.fs li { font-size: 17px; line-height: 1.4; color: #2a1d3a; }
+  .card.fs ol { padding-left: 22px; margin: 10px 0 16px; }
+  .card.fs li { margin-bottom: 6px; }
+  #fsOk { width: 100%; padding: 12px; border: 0; border-radius: 12px; background: #120a1c; color: #fff; font-size: 18px; font-weight: 700; letter-spacing: .06em; }
   #qrClose { width: 100%; padding: 12px; border: 0; border-radius: 12px; background: #120a1c; color: #fff; font-size: 18px; font-weight: 700; letter-spacing: .1em; }
 </style>
 </head>
@@ -231,10 +244,25 @@
     <div class="tips">
       <p><b>Brightness all the way up, and auto-brightness off,</b> or the dark room will dim your screen. (A web page can't do this for you.)</p>
       <p><b>Same channel = same flash.</b> Everyone on channel 1 flashes together, even if they joined at different times.</p>
-      <p id="iosTip" hidden><b>iPhone:</b> for true full screen, tap Share, then <b>Add to Home Screen</b>, and open it from there.</p>
       <p>Tap the light any time to switch channels or share.</p>
     </div>
     <div class="warn">Heads up: flashing lights.</div>
+
+    <section class="iphone">
+      <h3>On an iPhone: a one-minute setup</h3>
+      <ol>
+        <li><b>Full screen.</b> In Safari, tap <b>Share</b> (the square with the arrow pointing up), scroll down,
+          tap <b>Add to Home Screen</b>, then <b>Add</b>. Open <b>The Club</b> from your home screen: no bars at all.</li>
+        <li><b>Brightness all the way up.</b> Swipe down from the top-right corner and drag the sun slider to the top.</li>
+        <li><b>Auto-Brightness off</b>, or the dark room dims you: Settings, Accessibility, Display &amp; Text Size,
+          then turn off Auto-Brightness (at the very bottom).</li>
+        <li><b>Low Power Mode off.</b> It dims the screen and lets it sleep sooner: Settings, Battery.</li>
+        <li><b>Do Not Disturb on,</b> so texts don't pop up over the light: swipe down from the top-right corner, tap
+          Focus, then Do Not Disturb.</li>
+        <li><b>If the screen still goes to sleep:</b> Settings, Display &amp; Brightness, Auto-Lock, Never (just for
+          tonight).</li>
+      </ol>
+    </section>
   </div>
   <footer>A fan-made party light. Not affiliated with the show. <button id="puck" class="puck" aria-label="A secret"></button></footer>
   <input id="puckFile" type="file" accept="image/*" hidden>
@@ -252,7 +280,7 @@
 </div>
 
 <div id="tray">
-  <button id="trayHandle" class="trayHandle">&#9835; The song</button>
+  <button id="trayHandle" class="trayHandle">&#9652; &#9835; Play the song</button>
   <div class="trayBody">
   <div class="sheet">
     <h2>The DJ booth</h2>
@@ -287,6 +315,20 @@
 <div id="secret" hidden>
   <img id="secretImg" alt="">
   <div class="secretBar"><button id="secretSwap" class="ghost">Change photo</button><button id="secretClose" class="ghost">Back</button></div>
+</div>
+
+<div id="fsHelp" hidden>
+  <div class="card fs">
+    <h2>Go full screen</h2>
+    <p>This browser won't let a page fill the whole screen (iPhone Safari never does). Add it to your home screen once,
+    and it opens with no bars at all:</p>
+    <ol>
+      <li>Tap <b>Share</b>: the square with the arrow pointing up.</li>
+      <li>Scroll down, tap <b>Add to Home Screen</b>, then <b>Add</b>.</li>
+      <li>Open <b>The Club</b> from your home screen.</li>
+    </ol>
+    <button id="fsOk">Got it, keep the lights on</button>
+  </div>
 </div>
 
 <div id="qr" hidden>

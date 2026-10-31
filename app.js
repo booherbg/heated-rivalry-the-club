@@ -176,14 +176,39 @@ async function go() {
   running = true;
   document.body.classList.add('lit');
   Awake.on();
+  requestAnimationFrame(frame);
+  flashControls();
+  await fullScreen();
+  if (!CAN_FULL && !INSTALLED) FsHelp.maybe();
+}
+
+// ---- full screen ----
+// Android and desktop browsers allow it on a tap. iPhone Safari doesn't, for any page: there the way is Add to Home
+// Screen, which opens the page with no browser bars at all (INSTALLED).
+const CAN_FULL = !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+const INSTALLED = !!navigator.standalone || matchMedia('(display-mode: standalone), (display-mode: fullscreen)').matches;
+const isFull = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+async function fullScreen() {
+  if (!CAN_FULL || isFull()) return;
   const el = document.documentElement;
   try {
     if (el.requestFullscreen) await el.requestFullscreen({ navigationUI: 'hide' });
-    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-  } catch (e) { /* iPhone Safari has no full screen for pages; Add to Home Screen does it */ }
-  requestAnimationFrame(frame);
-  flashControls();
+    else el.webkitRequestFullscreen();
+  } catch (e) { /* refused: the next tap tries again */ }
 }
+const FsHelp = (() => {
+  let shown = false;
+  return {
+    maybe() {
+      let seen = false;
+      try { seen = localStorage.getItem('club-fs-help') === '1'; } catch (e) {}
+      if (seen || shown) return;
+      shown = true;
+      $('fsHelp').hidden = false;
+      setControls(false);
+    },
+  };
+})();
 function stop() {
   running = false;
   Awake.off();
@@ -245,10 +270,12 @@ function openTray() {
     f.appendChild(i);
   });
   tray.classList.add('open');
+  $('trayHandle').innerHTML = '&#9662; Fold it away';
   clearTimeout(hideTimer);
 }
 function foldTray() {
   tray.classList.remove('open');
+  $('trayHandle').innerHTML = '&#9652; &#9835; Play the song';
   if (running) flashControls();
 }
 $('trayHandle').addEventListener('click', () => (tray.classList.contains('open') ? foldTray() : openTray()));
@@ -292,6 +319,7 @@ $('share2').addEventListener('click', e => { e.stopPropagation(); showQr(); });
 $('exit').addEventListener('click', e => { e.stopPropagation(); stop(); });
 $('qrClose').addEventListener('click', e => { e.stopPropagation(); qrBox.hidden = true; if (running) flashControls(); });
 light.addEventListener('click', () => {
+  fullScreen();  // if the phone dropped out of full screen, a tap puts it back
   if (tray.classList.contains('open')) foldTray();
   else if (controls.hidden) flashControls();
   else setControls(false);
@@ -300,7 +328,11 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && running && !document.fullscreenElement) stop();
   if (/^[1-9]$/.test(e.key) && +e.key <= CHANNELS.length) pick(+e.key - 1);
 });
-if (/iPhone|iPod/.test(navigator.userAgent) && !navigator.standalone) $('iosTip').hidden = false;
+$('fsOk').addEventListener('click', e => {
+  e.stopPropagation();
+  $('fsHelp').hidden = true;
+  try { localStorage.setItem('club-fs-help', '1'); } catch (err) {}
+});
 
 showSync(Clock.state());
 Clock.sync().then(showSync);

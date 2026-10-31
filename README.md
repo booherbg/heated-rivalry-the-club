@@ -24,8 +24,9 @@ phones on the same channel show the same color at the same moment. Each phone ch
 ## Phone details
 
 - **Screen stays on:** the Screen Wake Lock API, or a tiny silent looping video on phones without it.
-- **Full screen:** the Fullscreen API where the phone has it (Android). iPhone Safari doesn't allow it for pages, so on an
-  iPhone, use Share, then Add to Home Screen, and open it from there.
+- **Full screen:** the Fullscreen API where the phone has it (Android, desktop), asked again on any tap if it drops out.
+  iPhone Safari doesn't allow it for pages, so the start screen carries a one-minute iPhone setup (Add to Home Screen,
+  brightness, Auto-Brightness and Low Power Mode off, Do Not Disturb), and a card says so the first time.
 - **Brightness:** a web page can't set it, so turn it all the way up.
 - **Sharing:** the Share button shows a QR code for the channel you're on.
 
