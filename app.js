@@ -283,10 +283,11 @@ $('djOpen').addEventListener('click', openTray);
 $('music2').addEventListener('click', e => { e.stopPropagation(); openTray(); });
 $('djClose').addEventListener('click', foldTray);
 
-// The secret: a tiny puck in the footer. It shows the zine (art/the-club-zine.svg, an original drawing), or a photo
-// picked from this phone instead: that photo stays on the phone (kept in this browser's own storage so it's there all
-// night), and never goes anywhere near the site.
+// The secret: a tiny puck in the footer. It shows the zine pieces (art/, original drawings), one after another with a
+// tap, and a photo picked from this phone first if there is one: that photo stays on the phone (kept in this
+// browser's own storage so it's there all night), and never goes anywhere near the site.
 const Secret = (() => {
+  const ART = ['art/the-club-zine.svg', 'art/the-club-flyer.svg'];
   const DB = 'the-club', STORE = 'secret';
   const open = () => new Promise((res, rej) => {
     const r = indexedDB.open(DB, 1);
@@ -297,26 +298,22 @@ const Secret = (() => {
     const tx = db.transaction(STORE, mode), req = fn(tx.objectStore(STORE));
     req.onsuccess = () => res(req.result); req.onerror = () => rej(req.error);
   }));
-  let url = null;
+  let url = null, photo = null, at = 0;
   async function load() { try { return await run('readonly', s => s.get('photo')); } catch (e) { return null; } }
   async function save(blob) { try { await run('readwrite', s => s.put(blob, 'photo')); } catch (e) { /* shown for now, just not kept */ } }
-  function show(blob) {
-    if (url) URL.revokeObjectURL(url);
-    url = URL.createObjectURL(blob);
-    $('secretImg').src = url;
-    $('secretSwap').textContent = 'Change photo';
+  function render() {
+    const items = (photo ? [photo] : []).concat(ART), item = items[at % items.length];
+    if (url) { URL.revokeObjectURL(url); url = null; }
+    $('secretImg').src = typeof item === 'string' ? item : (url = URL.createObjectURL(item));
+    $('secretSwap').textContent = photo ? 'Change photo' : 'Use a photo from this phone';
     $('secret').hidden = false;
   }
-  function showArt() {
-    $('secretImg').src = 'art/the-club-zine.svg';
-    $('secretSwap').textContent = 'Use a photo from this phone';
-    $('secret').hidden = false;
-  }
-  $('puck').addEventListener('click', async () => { const b = await load(); if (b) show(b); else showArt(); });
+  $('puck').addEventListener('click', async () => { photo = await load(); at = 0; render(); });
+  $('secretImg').addEventListener('click', () => { at++; render(); });
   $('puckFile').addEventListener('change', e => {
     const f = e.target.files && e.target.files[0];
     if (!f) return;
-    save(f); show(f); e.target.value = '';
+    save(f); photo = f; at = 0; render(); e.target.value = '';
   });
   $('secretSwap').addEventListener('click', () => $('puckFile').click());
   $('secretClose').addEventListener('click', () => { $('secret').hidden = true; });

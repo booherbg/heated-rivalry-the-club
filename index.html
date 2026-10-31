@@ -188,6 +188,8 @@
     mix-blend-mode: screen;
   }
   #secretImg { max-width: 100%; max-height: calc(100dvh - 110px); border-radius: 14px; box-shadow: 0 0 0 3px var(--pink), 0 0 0 6px var(--blue), 0 0 40px rgba(255, 28, 140, .45); }
+  #secretImg { cursor: pointer; }
+  .secretHint { position: absolute; left: 0; right: 0; bottom: calc(86px + env(safe-area-inset-bottom)); text-align: center; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); z-index: 1; }
   .secretBar { position: absolute; left: 16px; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); display: flex; gap: 10px; z-index: 1; }
   .secretBar .ghost { background: rgba(0, 0, 0, .55); }
 
@@ -320,6 +322,7 @@
 
 <div id="secret" hidden>
   <img id="secretImg" alt="">
+  <div class="secretHint">tap it for the next one</div>
   <div class="secretBar"><button id="secretSwap" class="ghost">Change photo</button><button id="secretClose" class="ghost">Back</button></div>
 </div>
 

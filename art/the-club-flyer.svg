@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 760" width="600" height="760">
+<defs>
+  <filter id="grain" filterUnits="userSpaceOnUse" x="0" y="0" width="600" height="760">
+    <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7"/>
+    <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.6 1.05"/>
+    <feComposite in2="SourceGraphic" operator="in"/>
+  </filter>
+  <filter id="rough" filterUnits="userSpaceOnUse" x="-50" y="-50" width="700" height="860">
+    <feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="2" seed="3" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5"/>
+  </filter>
+  <filter id="torn" x="-10%" y="-10%" width="120%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency=".2" numOctaves="1" seed="2" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="4"/>
+  </filter>
+  <pattern id="dots" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+    <rect width="8" height="8" fill="#f1ece2"/><circle cx="4" cy="4" r="2.6" fill="#000"/>
+  </pattern>
+  <radialGradient id="vig" cx="300" cy="400" r="420" gradientUnits="userSpaceOnUse">
+    <stop offset=".1" stop-color="#fff"/><stop offset="1" stop-color="#000"/>
+  </radialGradient>
+  <mask id="raymask"><rect width="600" height="760" fill="url(#vig)"/><rect width="600" height="760" fill="url(#dots)" style="mix-blend-mode:multiply"/></mask>
+</defs>
+<rect width="600" height="760" fill="#f1ece2"/>
+<!-- sunburst, printed in halftone, fading out to the edges -->
+<g mask="url(#raymask)" style="mix-blend-mode:multiply" opacity=".7"><polygon points="300,400 1200,400 1194,501" fill="#ff2a8f" opacity=".9"/><polygon points="300,400 1177,600 1149,697" fill="#2f55ff" opacity=".9"/><polygon points="300,400 1111,790 1062,879" fill="#ff2a8f" opacity=".9"/><polygon points="300,400 1004,961 936,1036" fill="#2f55ff" opacity=".9"/><polygon points="300,400 861,1104 779,1162" fill="#ff2a8f" opacity=".9"/><polygon points="300,400 690,1211 597,1249" fill="#2f55ff" opacity=".9"/><polygon points="300,400 500,1277 401,1294" fill="#ff2a8f" opacity=".9"/><polygon points="300,400 300,1300 199,1294" fill="#2f55ff" opacity=".9"/><polygon points="300,400 100,1277 3,1249" fill="#ff2a8f" opacity=".9"/><polygon points="300,400 -90,1211 -179,1162" fill="#2f55ff" opacity=".9"/><polygon points="300,400 -261,1104 -336,1036" fill="#ff2a8f" opacity=".9"/><polygon points="300,400 -404,961 -462,879" fill="#2f55ff" opacity=".9"/><polygon points="300,400 -511,790 -549,697" fill="#ff2a8f" opacity=".9"/><polygon points="300,400 -577,600 -594,501" fill="#2f55ff" opacity=".9"/><polygon points="300,400 -600,400 -594,299" fill="#ff2a8f" opacity=".9"/><polygon points="300,400 -577,200 -549,103" fill="#2f55ff" opacity=".9"/><polygon points="300,400 -511,10 -462,-79" fill="#ff2a8f" opacity=".9"/><polygon points="300,400 -404,-161 -336,-236" fill="#2f55ff" opacity=".9"/><polygon points="300,400 -261,-304 -179,-362" fill="#ff2a8f" opacity=".9"/><polygon points="300,400 -90,-411 3,-449" fill="#2f55ff" opacity=".9"/><polygon points="300,400 100,-477 199,-494" fill="#ff2a8f" opacity=".9"/><polygon points="300,400 300,-500 401,-494" fill="#2f55ff" opacity=".9"/><polygon points="300,400 500,-477 597,-449" fill="#ff2a8f" opacity=".9"/><polygon points="300,400 690,-411 779,-362" fill="#2f55ff" opacity=".9"/><polygon points="300,400 861,-304 936,-236" fill="#ff2a8f" opacity=".9"/><polygon points="300,400 1004,-161 1062,-79" fill="#2f55ff" opacity=".9"/><polygon points="300,400 1111,10 1149,103" fill="#ff2a8f" opacity=".9"/><polygon points="300,400 1177,200 1194,299" fill="#2f55ff" opacity=".9"/></g>
+<!-- the crossed sticks, two print runs off register -->
+<g style="mix-blend-mode:multiply" filter="url(#rough)" transform="translate(-4 3)"><g transform=""><line x1="118" y1="610" x2="520" y2="120" stroke="#ff2a8f" stroke-width="30" stroke-linecap="round"/><path d="M 118 610 C 104 628 70 650 30 652 C 16 652 12 636 26 628 C 52 616 84 600 100 586 Z" fill="#ff2a8f"/><path d="M 46 640 L 58 620 M 62 637 L 74 614 M 78 630 L 90 605" stroke="#141016" stroke-width="7" stroke-linecap="round"/><line x1="500" y1="144" x2="520" y2="120" stroke="#141016" stroke-width="32" stroke-linecap="round"/></g></g>
+<g style="mix-blend-mode:multiply" filter="url(#rough)" transform="translate(4 -2)"><g transform="translate(600 0) scale(-1 1)"><line x1="118" y1="610" x2="520" y2="120" stroke="#2f55ff" stroke-width="30" stroke-linecap="round"/><path d="M 118 610 C 104 628 70 650 30 652 C 16 652 12 636 26 628 C 52 616 84 600 100 586 Z" fill="#2f55ff"/><path d="M 46 640 L 58 620 M 62 637 L 74 614 M 78 630 L 90 605" stroke="#141016" stroke-width="7" stroke-linecap="round"/><line x1="500" y1="144" x2="520" y2="120" stroke="#141016" stroke-width="32" stroke-linecap="round"/></g></g>
+<!-- the puck, with a heart cut out of it -->
+<g filter="url(#rough)">
+  <ellipse cx="300" cy="426" rx="92" ry="34" fill="#141016"/>
+  <rect x="208" y="396" width="184" height="30" fill="#141016"/>
+  <ellipse cx="300" cy="396" rx="92" ry="34" fill="#2a2430"/>
+  <path d="M 300 402 C 300 388 280 380 272 394 C 264 408 286 420 300 432 C 314 420 336 408 328 394 C 320 380 300 388 300 402 Z" transform="translate(300 396) scale(1.25 .7) translate(-300 -406)" fill="#ff2a8f"/>
+</g>
+<!-- the headline, cut from magazines -->
+<g transform="translate(105.1 92)"><g transform="translate(29.1 1.5) rotate(-2.3)"><rect x="-29.1" y="-40.6" width="58.3" height="81.1" fill="#2f55ff" filter="url(#torn)"/><text y="23.8" text-anchor="middle" font-family="Arial Black, sans-serif" font-weight="900" font-size="57.4" fill="#f1ece2">H</text></g><g transform="translate(91.2 -3.4) rotate(6.1)"><rect x="-27.8" y="-36.8" width="55.6" height="73.7" fill="#f1ece2" filter="url(#torn)"/><text y="23.8" text-anchor="middle" font-family="Courier New, monospace" font-weight="900" font-size="57.4" fill="#141016">E</text></g><g transform="translate(157.1 -0.3) rotate(6.1)"><rect x="-35.0" y="-40.0" width="69.9" height="80.1" fill="#141016" filter="url(#torn)"/><text y="23.8" text-anchor="middle" font-family="Impact, Arial Black, sans-serif" font-weight="900" font-size="57.4" fill="#ff2a8f">A</text></g><g transform="translate(225.8 0.3) rotate(6.6)"><rect x="-28.5" y="-41.2" width="56.9" height="82.4" fill="#f6e05e" filter="url(#torn)"/><text y="23.8" text-anchor="middle" font-family="Georgia, serif" font-weight="900" font-size="57.4" fill="#141016">T</text></g><g transform="translate(292.4 1.3) rotate(4.6)"><rect x="-32.5" y="-37.2" width="64.9" height="74.4" fill="#141016" filter="url(#torn)"/><text y="23.8" text-anchor="middle" font-family="Futura, Avenir Next, sans-serif" font-weight="900" font-size="57.4" fill="#f1ece2">E</text></g><g transform="translate(355.9 3.1) rotate(-0.5)"><rect x="-27.5" y="-42.8" width="55.1" height="85.6" fill="#ff2a8f" filter="url(#torn)"/><text y="23.8" text-anchor="middle" font-family="Times New Roman, serif" font-weight="900" font-size="57.4" fill="#141016">D</text></g></g>
+<g transform="translate(300 150) rotate(-2)"><text text-anchor="middle" font-family="Courier New, monospace" font-size="20" fill="#141016">one night only, at</text></g>
+<!-- black tape banner -->
+<g transform="translate(300 600) rotate(-3)">
+  <rect x="-292" y="-24" width="584" height="44" fill="#141016" filter="url(#torn)"/>
+  <text y="8" text-anchor="middle" font-family="Impact, Arial Black, sans-serif" font-size="25" letter-spacing="2" fill="#f1ece2">NO REFS &#183; NO RULES &#183; NO PENALTY BOX</text>
+</g>
+<g transform="translate(137.8 690)"><g transform="translate(18.6 -3.4) rotate(4.7)"><rect x="-18.6" y="-28.0" width="37.2" height="56.1" fill="#ff2a8f" filter="url(#torn)"/><text y="15.6" text-anchor="middle" font-family="Impact, Arial Black, sans-serif" font-weight="900" font-size="37.7" fill="#141016">T</text></g><g transform="translate(61.9 -5.7) rotate(5.2)"><rect x="-20.2" y="-27.1" width="40.4" height="54.3" fill="#cfc8bb" filter="url(#torn)"/><text y="15.6" text-anchor="middle" font-family="Georgia, serif" font-weight="900" font-size="37.7" fill="#141016">H</text></g><g transform="translate(106.5 -7.0) rotate(4.7)"><rect x="-22.2" y="-26.1" width="44.3" height="52.3" fill="#2f55ff" filter="url(#torn)"/><text y="15.6" text-anchor="middle" font-family="Futura, Avenir Next, sans-serif" font-weight="900" font-size="37.7" fill="#f1ece2">E</text></g><g transform="translate(175.1 5.6) rotate(8.0)"><rect x="-21.6" y="-25.2" width="43.2" height="50.4" fill="#141016" filter="url(#torn)"/><text y="15.6" text-anchor="middle" font-family="Arial Black, sans-serif" font-weight="900" font-size="37.7" fill="#ff2a8f">C</text></g><g transform="translate(217.0 -1.7) rotate(7.9)"><rect x="-18.1" y="-26.6" width="36.1" height="53.3" fill="#f6e05e" filter="url(#torn)"/><text y="15.6" text-anchor="middle" font-family="Courier New, monospace" font-weight="900" font-size="37.7" fill="#141016">L</text></g><g transform="translate(258.2 -0.9) rotate(-5.0)"><rect x="-20.1" y="-24.3" width="40.2" height="48.6" fill="#141016" filter="url(#torn)"/><text y="15.6" text-anchor="middle" font-family="Impact, Arial Black, sans-serif" font-weight="900" font-size="37.7" fill="#f1ece2">U</text></g><g transform="translate(301.9 -0.6) rotate(-5.1)"><rect x="-19.1" y="-25.2" width="38.2" height="50.4" fill="#ff2a8f" filter="url(#torn)"/><text y="15.6" text-anchor="middle" font-family="Georgia, serif" font-weight="900" font-size="37.7" fill="#141016">B</text></g></g>
+<!-- the stub -->
+<g transform="translate(512 236) rotate(16)" filter="url(#torn)">
+  <rect x="-58" y="-40" width="116" height="80" fill="#f6e05e" stroke="#141016" stroke-width="2"/>
+  <line x1="-30" y1="-40" x2="-30" y2="40" stroke="#141016" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <text x="14" y="-6" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="17" fill="#141016">ADMIT</text>
+  <text x="14" y="20" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="24" fill="#141016">TWO</text>
+  <text x="-44" y="6" font-family="Courier New, monospace" font-size="11" fill="#141016" transform="rotate(-90 -44 0)">No. 0016</text>
+</g>
+<!-- tape -->
+<rect x="-24" y="-6" width="140" height="40" fill="#e8dcc0" opacity=".75" transform="rotate(-16 46 14)"/>
+<rect x="488" y="726" width="140" height="40" fill="#e8dcc0" opacity=".75" transform="rotate(12 558 746)"/>
+<rect width="600" height="760" fill="#141016" filter="url(#grain)" opacity=".16"/>
+</svg>
