@@ -165,6 +165,12 @@
   .iphone li { margin-bottom: 9px; }
   .iphone b { color: var(--ink); }
   .warn { font-size: 13px; color: var(--dim); text-align: center; opacity: .8; }
+  .love { margin-bottom: 5px; font-size: 12px; letter-spacing: .04em; }
+  .rh {
+    font-size: 15px; vertical-align: -1px;
+    background: linear-gradient(90deg, #e40303, #ff8c00, #ffed00, #008026, #24408e, #732982);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
   footer { position: relative; margin-top: auto; font-size: 12px; color: var(--dim); opacity: .7; text-align: center; }
 
   /* ---- the secret: a tiny puck in the footer ---- */
@@ -264,7 +270,7 @@
       </ol>
     </section>
   </div>
-  <footer>A fan-made party light. Not affiliated with the show. <button id="puck" class="puck" aria-label="A secret"></button></footer>
+  <footer><div class="love">made with love for Morgan and McKaila <span class="rh" aria-label="rainbow heart">&#9829;</span></div>A fan-made party light. Not affiliated with the show. <button id="puck" class="puck" aria-label="A secret"></button></footer>
   <input id="puckFile" type="file" accept="image/*" hidden>
 </section>
 
