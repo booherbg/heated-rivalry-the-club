@@ -16,7 +16,7 @@ function chance(n) {
   return (h >>> 0) / 4294967296;
 }
 // The beat everything locks to. A channel link can carry its own (?bpm=128), so a room can match the song.
-const BPM = Math.min(200, Math.max(60, parseFloat(new URLSearchParams(location.search).get('bpm')) || 120));
+const BPM = Math.min(200, Math.max(60, parseFloat(new URLSearchParams(location.search).get('bpm')) || 126));  // 126: the Harrison remix's tempo, by one catalog (unconfirmed)
 const BEAT = 60000 / BPM;
 
 // ---- the channels: each one maps a time in ms (since 1970, world clock) to a color ----
@@ -140,7 +140,7 @@ let channel = Math.min(CHANNELS.length, Math.max(1, parseInt(params.get('ch'), 1
 let running = false, hideTimer = null, lastTheme = '';
 
 const rgb = c => `rgb(${c.map(v => Math.round(v)).join(',')})`;
-const query = ch => `?ch=${ch + 1}${BPM !== 120 ? `&bpm=${BPM}` : ''}`;
+const query = ch => `?ch=${ch + 1}${BPM !== 126 ? `&bpm=${BPM}` : ''}`;
 const shareUrl = ch => `${location.origin}${location.pathname}${query(ch)}`;
 
 function buildChannelButtons(holder, onPick) {
@@ -230,6 +230,21 @@ buildChannelButtons($('chans'), pick);
 buildChannelButtons($('chans2'), i => { pick(i); flashControls(); });
 markChannel();
 $('go').addEventListener('click', go);
+// The DJ booth: its players load only when someone opens it, so the lights never wait on Spotify or YouTube.
+$('djOpen').addEventListener('click', () => {
+  document.querySelectorAll('#booth .frame').forEach(f => {
+    if (f.firstChild) return;
+    const i = document.createElement('iframe');
+    i.src = f.dataset.src;
+    i.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+    i.loading = 'lazy';
+    i.title = f.classList.contains('yt') ? 'The club scene, on YouTube' : 'The song, on Spotify';
+    if (f.classList.contains('yt')) i.referrerPolicy = 'strict-origin-when-cross-origin';
+    f.appendChild(i);
+  });
+  $('booth').hidden = false;
+});
+$('djClose').addEventListener('click', () => { $('booth').hidden = true; });
 $('share').addEventListener('click', showQr);
 $('share2').addEventListener('click', e => { e.stopPropagation(); showQr(); });
 $('exit').addEventListener('click', e => { e.stopPropagation(); stop(); });

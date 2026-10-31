@@ -106,6 +106,29 @@
     font-weight: 800; letter-spacing: .06em; color: #fff; background: #111; border: 2px solid var(--pink);
     box-shadow: 0 0 12px rgba(255, 32, 71, .6), inset 0 0 10px rgba(60, 103, 255, .5);
   }
+  button.dj { width: 100%; text-align: left; }
+  #booth {
+    position: fixed; inset: 0; z-index: 4; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    background: #050208; padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
+  }
+  .sheet { max-width: 440px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+  .sheet h2 {
+    margin: 4px 0 0; font-size: 34px; text-transform: uppercase; letter-spacing: .1em; text-align: center; color: #ffe3ea;
+    text-shadow: 0 0 8px var(--pink), 0 0 24px var(--pink);
+  }
+  .sheet .song { margin: 0; text-align: center; color: var(--dim); font-size: 16px; line-height: 1.4; }
+  .sheet .song b { color: var(--ink); font-size: 20px; }
+  .sheet .note { margin: 0; text-align: center; font-size: 14px; letter-spacing: .06em; color: var(--dim); }
+  .opt { display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, .12); background: rgba(255, 255, 255, .03); }
+  .optname { font-size: 13px; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); }
+  .app { flex: 1; text-align: center; padding: 13px 8px; border-radius: 12px; font-weight: 800; font-size: 17px; text-decoration: none; color: #fff; }
+  .app.spotify { background: #1db954; color: #04110a; }
+  .app.apple { background: linear-gradient(180deg, #fb5c74, #fa233b); }
+  .frame { width: 100%; border-radius: 12px; overflow: hidden; background: #000; }
+  .frame.spot { height: 152px; }
+  .frame.yt { aspect-ratio: 16 / 9; }
+  .frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .hint { font-size: 13px; color: var(--dim); }
   .djwords { display: flex; flex-direction: column; }
   .djwords b { font-size: 19px; }
   .djwords span { font-size: 14px; color: var(--dim); }
@@ -159,10 +182,10 @@
     <div class="row">
       <button id="share" class="ghost">Share this channel (QR)</button>
     </div>
-    <a class="dj" href="https://youtu.be/4ctZ01yg0tc?t=115" target="_blank" rel="noopener">
+    <button id="djOpen" class="dj">
       <span class="djtag">DJ</span>
-      <span class="djwords"><b>Play the song from the scene</b><span>One phone only, on the speaker. Opens the clip at 1:55.</span></span>
-    </a>
+      <span class="djwords"><b>The DJ booth</b><span>Play the song from the scene. One phone only, on the speaker.</span></span>
+    </button>
     <div id="sync"></div>
     <div class="tips">
       <p><b>Brightness all the way up.</b> A web page can't turn it up for you.</p>
@@ -182,6 +205,36 @@
       <button id="share2" class="ghost">Share (QR)</button>
       <button id="exit" class="ghost">Exit</button>
     </div>
+  </div>
+</div>
+
+<div id="booth" hidden>
+  <div class="sheet">
+    <h2>The DJ booth</h2>
+    <p class="song"><b>All the Things She Said</b><br>Harrison's 2022 remix of t.A.T.u., the version that plays in the club.</p>
+    <p class="note">One phone plays it, on the speaker. Everyone else, lights.</p>
+
+    <div class="opt">
+      <div class="optname">1. The whole song, in your music app</div>
+      <div class="row">
+        <a class="app spotify" href="https://open.spotify.com/track/2ihHDb5epUtpn97W0pOsOA" target="_blank" rel="noopener">Open in Spotify</a>
+        <a class="app apple" href="https://music.apple.com/us/album/all-the-things-she-said/1643178562?i=1643178563" target="_blank" rel="noopener">Open in Apple Music</a>
+      </div>
+    </div>
+
+    <div class="opt">
+      <div class="optname">2. Right here, with Spotify</div>
+      <div class="frame spot" data-src="https://open.spotify.com/embed/track/2ihHDb5epUtpn97W0pOsOA?utm_source=generator&amp;theme=0"></div>
+      <div class="hint">The whole song if this browser is signed in to Spotify; otherwise a 30-second preview.</div>
+    </div>
+
+    <div class="opt">
+      <div class="optname">3. The scene itself, from 1:55</div>
+      <div class="frame yt" data-src="https://www.youtube-nocookie.com/embed/4ctZ01yg0tc?start=115&amp;playsinline=1&amp;rel=0"></div>
+      <div class="hint">Crave's clip of the club scene. Its own audio, dialogue and all.</div>
+    </div>
+
+    <button id="djClose" class="ghost">Back to the lights</button>
   </div>
 </div>
 
