@@ -187,8 +187,16 @@
     background: radial-gradient(70% 55% at 0% 0%, rgba(255, 28, 140, .35), transparent 70%), radial-gradient(70% 55% at 100% 100%, rgba(36, 64, 255, .4), transparent 70%);
     mix-blend-mode: screen;
   }
-  #secretImg { max-width: 100%; max-height: calc(100dvh - 110px); border-radius: 14px; box-shadow: 0 0 0 3px var(--pink), 0 0 0 6px var(--blue), 0 0 40px rgba(255, 28, 140, .45); }
+  #secretImg { max-width: 100%; max-height: calc(100dvh - 190px); margin-top: 30px; border-radius: 14px; box-shadow: 0 0 0 3px var(--pink), 0 0 0 6px var(--blue), 0 0 40px rgba(255, 28, 140, .45); }
   #secretImg { cursor: pointer; }
+  .hockey {
+    position: absolute; left: 50%; top: max(18px, env(safe-area-inset-top)); z-index: 2; transform: translateX(-50%) rotate(-2deg);
+    padding: 10px 18px; background: #f1ece2; color: #141016; text-decoration: none; white-space: nowrap;
+    font: 900 20px/1 Impact, "Arial Black", "Avenir Next Condensed", sans-serif; letter-spacing: .08em;
+    box-shadow: 0 0 0 2px #141016, 5px 5px 0 var(--pink), -5px -5px 0 var(--blue);
+    border-bottom: 6px solid transparent;
+    border-image: linear-gradient(90deg, #e40303 0 16.6%, #ff8c00 0 33.3%, #ffed00 0 50%, #008026 0 66.6%, #24408e 0 83.3%, #732982 0) 1;
+  }
   .secretHint { position: absolute; left: 0; right: 0; bottom: calc(86px + env(safe-area-inset-bottom)); text-align: center; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); z-index: 1; }
   .secretBar { position: absolute; left: 16px; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); display: flex; gap: 10px; z-index: 1; }
   .secretBar .ghost { background: rgba(0, 0, 0, .55); }
@@ -322,7 +330,8 @@
 
 <div id="secret" hidden>
   <img id="secretImg" alt="">
-  <div class="secretHint">tap it for the next one</div>
+  <a class="hockey" href="game.html">&#9654; PLAY HOCKEY</a>
+  <div class="secretHint">tap the picture for the next one</div>
   <div class="secretBar"><button id="secretSwap" class="ghost">Change photo</button><button id="secretClose" class="ghost">Back</button></div>
 </div>
 

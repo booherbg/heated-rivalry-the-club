@@ -15,6 +15,13 @@ The pink and blue started as samples from the club scene, then were tuned by eye
 **QR codes:** https://blainebooher.com/heated-rivalry-the-club/qr, all three channels, printable. `qr?ch=1` shows one
 channel as big as the screen allows, for a TV or a laptop by the door.
 
+## The secret
+
+The tiny puck at the bottom of the start screen shows two zine pieces (`art/`, drawn from scratch) and, under them, a
+**Play hockey** button: **Heated Hockey** (`game.html`), Pong on a zine page. You're Hollander or Rozanov; the phone
+plays the other; first to seven. Pride Tape down the center line, rainbow bunting, a disco ball, a rainbow puck trail, a
+pride flag on every goal, a KISS CAM on long rallies, and a stupid Canadian wolf bird that flies through now and then.
+
 ## How the sync works
 
 There's no server. Each channel's color is a pure function of the world time (`CHANNELS[n].color(t)` in `app.js`), so two
