@@ -283,8 +283,9 @@ $('djOpen').addEventListener('click', openTray);
 $('music2').addEventListener('click', e => { e.stopPropagation(); openTray(); });
 $('djClose').addEventListener('click', foldTray);
 
-// The secret: a tiny puck in the footer shows a photo picked from this phone. The photo stays on the phone (kept in
-// this browser's own storage so it's there all night), and never goes anywhere near the site.
+// The secret: a tiny puck in the footer. It shows the zine (art/the-club-zine.svg, an original drawing), or a photo
+// picked from this phone instead: that photo stays on the phone (kept in this browser's own storage so it's there all
+// night), and never goes anywhere near the site.
 const Secret = (() => {
   const DB = 'the-club', STORE = 'secret';
   const open = () => new Promise((res, rej) => {
@@ -303,9 +304,15 @@ const Secret = (() => {
     if (url) URL.revokeObjectURL(url);
     url = URL.createObjectURL(blob);
     $('secretImg').src = url;
+    $('secretSwap').textContent = 'Change photo';
     $('secret').hidden = false;
   }
-  $('puck').addEventListener('click', async () => { const b = await load(); if (b) show(b); else $('puckFile').click(); });
+  function showArt() {
+    $('secretImg').src = 'art/the-club-zine.svg';
+    $('secretSwap').textContent = 'Use a photo from this phone';
+    $('secret').hidden = false;
+  }
+  $('puck').addEventListener('click', async () => { const b = await load(); if (b) show(b); else showArt(); });
   $('puckFile').addEventListener('change', e => {
     const f = e.target.files && e.target.files[0];
     if (!f) return;
