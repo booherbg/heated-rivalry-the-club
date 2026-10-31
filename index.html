@@ -108,10 +108,31 @@
     box-shadow: 0 0 12px rgba(255, 28, 140, .6), inset 0 0 10px rgba(36, 64, 255, .5);
   }
   button.dj { width: 100%; text-align: left; }
-  #booth {
-    position: fixed; inset: 0; z-index: 4; overflow-y: auto; -webkit-overflow-scrolling: touch;
-    background: #050208; padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
+  /* ---- the music tray: folds up from the bottom; folded, its players keep playing ---- */
+  #tray {
+    --handle: 50px;
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 4; max-height: 88dvh;
+    display: flex; flex-direction: column;
+    transform: translateY(calc(100% - var(--handle) - env(safe-area-inset-bottom)));
+    transition: transform .35s cubic-bezier(.2, .8, .2, 1);
   }
+  #tray.open { transform: none; }
+  body.lit:not(.ctl) #tray:not(.open) { transform: translateY(100%); }  /* out of the light's way, still playing */
+  .trayHandle {
+    flex: none; height: var(--handle); width: min(440px, 100%); margin: 0 auto; border: 0; border-radius: 18px 18px 0 0;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    background: rgba(5, 2, 8, .94); border-top: 1px solid rgba(255, 255, 255, .2);
+    box-shadow: 0 -6px 24px rgba(255, 28, 140, .25), 0 -2px 30px rgba(36, 64, 255, .2);
+    font-size: 16px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  }
+  .trayHandle::before { content: ""; width: 34px; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, .35); }
+  #tray.open .trayHandle::before { transform: rotate(180deg); }
+  .trayBody {
+    overflow-y: auto; -webkit-overflow-scrolling: touch; background: #050208;
+    padding: 6px 16px calc(20px + env(safe-area-inset-bottom));
+  }
+  body:not(.lit) #start { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+  body.lit.ctl #controls { bottom: calc(62px + env(safe-area-inset-bottom)); }
   .sheet { max-width: 440px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
   .sheet h2 {
     margin: 4px 0 0; font-size: 34px; text-transform: uppercase; letter-spacing: .1em; text-align: center; color: #ffe3ea;
@@ -208,7 +229,7 @@
     </button>
     <div id="sync"></div>
     <div class="tips">
-      <p><b>Brightness all the way up.</b> A web page can't turn it up for you.</p>
+      <p><b>Brightness all the way up, and auto-brightness off,</b> or the dark room will dim your screen. (A web page can't do this for you.)</p>
       <p><b>Same channel = same flash.</b> Everyone on channel 1 flashes together, even if they joined at different times.</p>
       <p id="iosTip" hidden><b>iPhone:</b> for true full screen, tap Share, then <b>Add to Home Screen</b>, and open it from there.</p>
       <p>Tap the light any time to switch channels or share.</p>
@@ -223,17 +244,20 @@
   <div id="controls" hidden>
     <div id="chans2"></div>
     <div class="row">
-      <button id="share2" class="ghost">Share (QR)</button>
+      <button id="share2" class="ghost">Share</button>
+      <button id="music2" class="ghost">&#9835; Music</button>
       <button id="exit" class="ghost">Exit</button>
     </div>
   </div>
 </div>
 
-<div id="booth" hidden>
+<div id="tray">
+  <button id="trayHandle" class="trayHandle">&#9835; The song</button>
+  <div class="trayBody">
   <div class="sheet">
     <h2>The DJ booth</h2>
     <p class="song"><b>All the Things She Said</b><br>Harrison's 2022 remix of t.A.T.u., the version that plays in the club.</p>
-    <p class="note">One phone plays it, on the speaker. Everyone else, lights.</p>
+    <p class="note">One phone plays it, on the speaker. Fold this away and the music keeps going under the lights.</p>
 
     <div class="opt">
       <div class="optname">1. The whole song, in your music app</div>
@@ -246,7 +270,7 @@
     <div class="opt">
       <div class="optname">2. Right here, with Spotify</div>
       <div class="frame spot" data-src="https://open.spotify.com/embed/track/2ihHDb5epUtpn97W0pOsOA?utm_source=generator&amp;theme=0"></div>
-      <div class="hint">The whole song if this browser is signed in to Spotify; otherwise a 30-second preview.</div>
+      <div class="hint">The whole song if this browser is signed in to Spotify; otherwise a 30-second preview. For the whole song with the lights on one phone: Open in Spotify, start it, and come back here; it keeps playing.</div>
     </div>
 
     <div class="opt">
@@ -255,7 +279,8 @@
       <div class="hint">Crave's clip of the club scene. Its own audio, dialogue and all.</div>
     </div>
 
-    <button id="djClose" class="ghost">Back to the lights</button>
+    <button id="djClose" class="ghost">Fold it away</button>
+  </div>
   </div>
 </div>
 

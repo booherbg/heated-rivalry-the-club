@@ -4,8 +4,6 @@
 // ---- the colors: first sampled from the club scene, then tuned by eye on a phone ----
 const PINK = [255, 28, 140];  // hot pink (Blaine, 2026-10-31: the scene's crimson read too red; "it's pink")
 const BLUE = [36, 64, 255];   // the scene's cold blue, a touch deeper
-const GREEN = [0, 255, 120];
-const TEAL_BLUE = [0, 84, 255];
 
 const mix = (a, b, k) => a.map((v, i) => v + (b[i] - v) * k);
 const dim = (c, k) => c.map(v => v * k);
@@ -19,34 +17,29 @@ function chance(n) {
 const BPM = Math.min(200, Math.max(60, parseFloat(new URLSearchParams(location.search).get('bpm')) || 126));  // 126: the Harrison remix's tempo, by one catalog (unconfirmed)
 const BEAT = 60000 / BPM;
 
+// The flicker: pink, blue, pink, blue, one hit a slot, each a quick hit and then dark, with a few hits dropped and
+// the rest a little uneven, like a strobe that's been going all night. Every fourth hit always lands.
+function flicker(t, slot) {
+  const n = Math.floor(t / slot), p = (t - n * slot) / slot;
+  const c = n % 2 === 0 ? PINK : BLUE;
+  if (n % 4 !== 0 && chance(n) < 0.18) return dim(c, 0.03);
+  const k = p < 0.6 ? 0.78 + 0.22 * chance(n * 7 + 3) : 0.03;
+  return dim(c, k);
+}
+
 // ---- the channels: each one maps a time in ms (since 1970, world clock) to a color ----
 const CHANNELS = [
   {
     name: 'The Club',
     blurb: 'Fast pink and blue flicker',
     swatch: [PINK, BLUE],
-    color(t) {
-      // Sixteenth notes: pink, blue, pink, blue, each a quick hit and then dark, with a few hits dropped and the
-      // rest a little uneven, like a strobe that's been going all night. The first hit of every beat always lands.
-      const slot = BEAT / 4, n = Math.floor(t / slot), p = (t - n * slot) / slot;
-      const c = n % 2 === 0 ? PINK : BLUE;
-      if (n % 4 !== 0 && chance(n) < 0.18) return dim(c, 0.03);
-      const k = p < 0.6 ? 0.78 + 0.22 * chance(n * 7 + 3) : 0.03;
-      return dim(c, k);
-    },
+    color: t => flicker(t, BEAT / 4),  // sixteenth notes
   },
   {
     name: 'Slow Burn',
-    blurb: 'Green, then blue: holds, then a quick blend',
-    swatch: [GREEN, TEAL_BLUE],
-    color(t) {
-      // Each color holds for about five seconds, then blends over quickly into the other.
-      const span = 5000, blend = 800, n = Math.floor(t / span), p = t - n * span;
-      const [from, to] = n % 2 === 0 ? [GREEN, TEAL_BLUE] : [TEAL_BLUE, GREEN];
-      if (p < span - blend) return from;
-      const q = (p - (span - blend)) / blend;
-      return mix(from, to, q * q * (3 - 2 * q));
-    },
+    blurb: 'The same flicker, four times slower',
+    swatch: [PINK, BLUE],
+    color: t => flicker(t, BEAT),  // quarter notes (Blaine, 2026-10-31: no green; channel 1, four times slower)
   },
   {
     name: 'Rivals',
@@ -181,6 +174,7 @@ async function go() {
   start.hidden = true;
   light.hidden = false;
   running = true;
+  document.body.classList.add('lit');
   Awake.on();
   const el = document.documentElement;
   try {
@@ -194,17 +188,23 @@ function stop() {
   running = false;
   Awake.off();
   light.hidden = true;
-  controls.hidden = true;
+  setControls(false);
+  document.body.classList.remove('lit');
   qrBox.hidden = true;
   start.hidden = false;
   document.documentElement.style.background = '';
   if (themeMeta) themeMeta.setAttribute('content', '#000000');
   if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
 }
+// The controls (and, under the lights, the music tray's handle) show for a moment after a tap.
+function setControls(on) {
+  controls.hidden = !on;
+  document.body.classList.toggle('ctl', on);
+}
 function flashControls() {
-  controls.hidden = false;
+  setControls(true);
   clearTimeout(hideTimer);
-  hideTimer = setTimeout(() => { controls.hidden = true; }, 3500);
+  hideTimer = setTimeout(() => { if (!tray.classList.contains('open')) setControls(false); }, 3500);
 }
 
 function showQr() {
@@ -230,9 +230,11 @@ buildChannelButtons($('chans'), pick);
 buildChannelButtons($('chans2'), i => { pick(i); flashControls(); });
 markChannel();
 $('go').addEventListener('click', go);
-// The DJ booth: its players load only when someone opens it, so the lights never wait on Spotify or YouTube.
-$('djOpen').addEventListener('click', () => {
-  document.querySelectorAll('#booth .frame').forEach(f => {
+// The music tray: its players load only when someone first opens it, so the lights never wait on Spotify or
+// YouTube. Folding it away only slides it off screen, so whatever is playing keeps playing.
+const tray = $('tray');
+function openTray() {
+  document.querySelectorAll('#tray .frame').forEach(f => {
     if (f.firstChild) return;
     const i = document.createElement('iframe');
     i.src = f.dataset.src;
@@ -242,9 +244,17 @@ $('djOpen').addEventListener('click', () => {
     if (f.classList.contains('yt')) i.referrerPolicy = 'strict-origin-when-cross-origin';
     f.appendChild(i);
   });
-  $('booth').hidden = false;
-});
-$('djClose').addEventListener('click', () => { $('booth').hidden = true; });
+  tray.classList.add('open');
+  clearTimeout(hideTimer);
+}
+function foldTray() {
+  tray.classList.remove('open');
+  if (running) flashControls();
+}
+$('trayHandle').addEventListener('click', () => (tray.classList.contains('open') ? foldTray() : openTray()));
+$('djOpen').addEventListener('click', openTray);
+$('music2').addEventListener('click', e => { e.stopPropagation(); openTray(); });
+$('djClose').addEventListener('click', foldTray);
 
 // The secret: a tiny puck in the footer shows a photo picked from this phone. The photo stays on the phone (kept in
 // this browser's own storage so it's there all night), and never goes anywhere near the site.
@@ -281,7 +291,11 @@ $('share').addEventListener('click', showQr);
 $('share2').addEventListener('click', e => { e.stopPropagation(); showQr(); });
 $('exit').addEventListener('click', e => { e.stopPropagation(); stop(); });
 $('qrClose').addEventListener('click', e => { e.stopPropagation(); qrBox.hidden = true; if (running) flashControls(); });
-light.addEventListener('click', () => { if (controls.hidden) flashControls(); else controls.hidden = true; });
+light.addEventListener('click', () => {
+  if (tray.classList.contains('open')) foldTray();
+  else if (controls.hidden) flashControls();
+  else setControls(false);
+});
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && running && !document.fullscreenElement) stop();
   if (/^[1-9]$/.test(e.key) && +e.key <= CHANNELS.length) pick(+e.key - 1);
